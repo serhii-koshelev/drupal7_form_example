@@ -1,0 +1,102 @@
+<?php
+
+function brander_test_menu() {
+    $items = array();
+
+    $items['brander/form'] = array(
+        'title' => 'Brander Form',
+        'description' => 'A form from test task.',
+        'page callback' => 'drupal_get_form',
+        'page arguments' => array('brander_test_form'),
+        'access callback' => TRUE
+    );
+
+    return $items;
+}
+
+
+function brander_test_form($form, &$form_state) {
+
+    $form['name']=array(
+        '#type'=> 'textfield',
+        '#title'=> 'Name',
+        '#placeholder'=> 'Your name',
+        '#size'=> 20,
+        '#required'=> TRUE,
+    );
+
+    $form['e-mail']=array(
+        '#type'=> 'textfield',
+        '#title'=> 'E-mail',
+        '#placeholder'=> 'Your e-mail address',
+        '#size'=> 20,
+        '#required'=> TRUE,
+    );
+
+    $form['phone']=array(
+        '#type'=> 'textfield',
+        '#title'=> 'Phone nubmer',
+        '#placeholder'=> 'Your phone number',
+        '#size'=> 20,
+    );
+
+    $form['message']=array(
+        '#type'=> 'textarea',
+        '#title'=> 'Message',
+        '#placeholder'=> 'Your message',
+        '#size'=> 20,
+        '#required'=> true,
+    );
+
+    $form['gender']=array(
+        '#type'=> 'radios',
+        '#title'=> 'Gender',
+        '#options' => array(
+            'Male'=>'Male',
+            'Female'=>'Female',
+        ),
+    );
+
+    $form['birthdate']=array(
+        '#type'=> 'date_popup',
+        '#title'=> 'Birth date',
+        '#date_format' => 'd M Y',
+        '#date_year_range'=> '1900: +0',
+    );
+
+    $form['public']=array(
+        '#type'=>'checkboxes',
+        '#title'=>'Show in list',
+        '#options'=> array('Show'),
+    );
+
+    $form['submit_button'] = array(
+        '#type' => 'submit',
+        '#value' => t('Send!'),
+    );
+
+    return $form;
+}
+
+function brander_test_form_validate($form, &$form_state) {
+
+    //e-mail
+    if (!filter_var($form_state['values']['e-mail'], FILTER_VALIDATE_EMAIL)) {
+        form_set_error('e-mail', $form_state['values']['e-mail'] . t(" is not a valid email address"));
+    }
+    //phone
+    if (!is_numeric($form_state['values']['phone']))
+        form_set_error('phone', t('Phone must contain numeric symbols.'));
+        if(strlen($form_state['values']['phone'])!=7 && strlen($form_state['values']['phone'])!=9){
+        form_set_error('phone', t('Wrong format! Phone must contain 7 or 9 numeric symbols.'));
+    }
+    //message
+    if(strlen($form_state['values']['message'])<10){
+            form_set_error('message', t('To short message'));
+    }
+
+
+}
+
+function brander_test_form_submit($form, &$form_state) {
+}
