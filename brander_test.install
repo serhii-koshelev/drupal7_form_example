@@ -1,0 +1,67 @@
+<?php
+
+
+function brander_test_install(){
+    drupal_install_schema('brander_form_submissions');
+}
+
+function brander_test_schema(){
+    $schema['brander_form_submissions'] = array(
+        'description' => 'The base table for brander form submissions',
+        'fields' => array(
+            'id' => array(
+                'description' => 'The primary identifier for a submission.',
+                'type' => 'serial',
+                'unsigned' => TRUE,
+                'not null' => TRUE),
+            'name' => array(
+                'description' => 'User name.',
+                'type' => 'varchar',
+                'length' => 32,
+                'not null' => TRUE,
+                'default' => ''),
+            'e-mail' => array(
+                'description' => 'User e-mail address.',
+                'type' => 'varchar',
+                'length' => 100,
+                'not null' => TRUE,
+                'default' => ''),
+            'phone' => array(
+                'description' => 'User phone number.',
+                'type' => 'varchar',
+                'length' => 9,
+                'not null' => TRUE,
+                'default' => ''),
+            'message' => array(
+                'description' => 'User message. ',
+                'type' => 'text',
+                'length' => 65.535 ),
+            //can be done with little patch for enum usage in schema api, decided to do simpler.
+            'gender' => array(
+                'description' => 'User gender. ',
+                'type' => 'varchar',
+                'length' => 10,
+                'not null' => TRUE,
+                'default' => '',
+                 ),
+            'birthdate' => array(
+                'description' => 'User birth date. ',
+                'mysql_type' => 'DATE',
+                'not null' => TRUE,
+                ),
+            //aslo, by default schema not support bits type, workaround with chars.
+            'public' => array(
+                'description' => 'User permission to put this submission in public list.',
+                'type' => 'char',
+                'lenght' => 1,
+                'not null' => TRUE,
+                'default' => '' ),
+    ),
+        'primary key' => array('id'),
+    );
+    return $schema;
+}
+
+function brander_test_uninstall(){
+    drupal_unnstall_schema('brander_form_submissions');
+}

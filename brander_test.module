@@ -67,7 +67,7 @@ function brander_test_form($form, &$form_state) {
     $form['public']=array(
         '#type'=>'checkboxes',
         '#title'=>'Show in list',
-        '#options'=> array('Show'),
+        '#options'=> array('1' => 'Show'),
     );
 
     $form['submit_button'] = array(
@@ -99,4 +99,26 @@ function brander_test_form_validate($form, &$form_state) {
 }
 
 function brander_test_form_submit($form, &$form_state) {
+
+            $name = $form_state['values']['name'];
+            $email = $form_state['values']['e-mail'];
+            $phone = $form_state['values']['phone'];
+            $message = $form_state['values']['message'];
+            $gender = $form_state['values']['gender'];
+            $birthdate = $form_state['values']['birthdate'];
+            $public = $form_state['values']['public'];
+
+     db_insert('brander_form_submissions')
+        ->fields(array(
+            '"name"' => $name,
+            '"e-mail"' => $email,
+            '"phone"' => $phone,
+            '"message"' => $message,
+            '"gender"' => $gender,
+            '"birthdate"' => $birthdate,
+            '"public"' => $public,
+        ))
+        ->execute();
+
+    drupal_set_message(t('The form has been submitted.'));
 }
