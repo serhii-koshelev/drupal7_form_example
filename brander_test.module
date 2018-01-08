@@ -11,6 +11,14 @@ function brander_test_menu() {
         'access callback' => TRUE
     );
 
+    $items['brander/list'] = array(
+        'title' => 'List of Brander form Submissions',
+        'description' => 'Output all submitted recors if public checked in form.',
+        'page callback' => 'brander_test_list',
+        'page arguments' => array('brander_list'),
+        'access callback'=> TRUE
+    );
+
     return $items;
 }
 
@@ -121,4 +129,23 @@ function brander_test_form_submit($form, &$form_state) {
         ->execute();
 
     drupal_set_message(t('The form has been submitted.'));
+}
+
+
+function brander_test_list(){
+
+    $records =db_select('brander_form_submissions', 'bfs')
+        ->condition('bfs.public', '1')
+        ->fields('bfs', array('name', 'phone', 'message'))
+        ->execute()
+        ->fetchAll();
+    $output = '<ul class="records">';
+    foreach($records as $record){
+        $output .= '<li class="record">
+            <div class="info">' .
+                '<span class="username">' .$record->name  .'</span>'.'<span>' . $record->phone . '</span>' .
+            '</div><div class="message">' . $record->message . '</div></li>';
+    }
+    $output = $output . '</ul>';
+    return $output;
 }
