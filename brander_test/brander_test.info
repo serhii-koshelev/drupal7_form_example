@@ -1,0 +1,7 @@
+core = "7.x"
+description = "Custom module for Brander test task."
+name = "Brander Test Task"
+
+stylesheets[all][] = styles.css
+
+dependencies[]=date:date
